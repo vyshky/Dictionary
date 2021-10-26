@@ -9,7 +9,7 @@ namespace Translator
     public class Dictionary
     {
         public string Path { get; set; }
-        public List<string> Word { get; set; } = new();
+        public Dictionary<string, string> Word { get; set; } = new();
         public string FileStr { get; set; }
 
         public void LoadDictionary()
@@ -31,22 +31,27 @@ namespace Translator
                 Console.WriteLine(e.Message);
             }
 
-            string[] word = FileStr.Split('|');
+            string[] lines = FileStr.Split('\r');
+            lines = Trim(lines);
 
-            for (int i = 0; i < word.Length; ++i)
+            for (int i = 0; i < lines.Length; i += 2)
             {
-                word[i] = word[i].Replace('\r', ' ');
-                word[i] = word[i].Replace('\n', ' ');
-                word[i] = word[i].Trim();
+                if (lines[i] == "") continue;
+                Word[lines[i]] = new string(lines[i + 1]);
+            }
+        }
+
+        public string[] Trim(string[] lines)
+        {
+            for (int i = 0; i < lines.Length; ++i)
+            {
+                lines[i] = lines[i].Replace('\r', ' ');
+                lines[i] = lines[i].Replace('\n', ' ');
+                lines[i] = lines[i].Replace('\t', ' ');
+                lines[i] = lines[i].Trim(' ');
             }
 
-            foreach (var w in word)
-            {
-                if (w.Contains(';'))
-                {
-                    Word.Add(w + '|');
-                }
-            }
+            return lines;
         }
     }
 }

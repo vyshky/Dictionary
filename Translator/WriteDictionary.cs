@@ -9,41 +9,34 @@ namespace Translator
         public string Path { get; set; }
         public string[] Translation { get; set; }
 
-        public async Task AddTranslation(string word, string[] translation)
+        public async Task AddTranslation(string checkWord)
         {
             if (Path == null) throw new NullReferenceException();
             Dictionary file = new Dictionary { Path = this.Path };
             file.LoadDictionary();
 
-            string addTranslate = "=";
-
-            for (int i = 0; i < file.Word.Count; ++i)
+            string concat = string.Empty;
+            foreach (var T in Translation)
             {
-                if (file.Word[i].Contains(word))
-                {
-                    addTranslate = file.Word[i];
-                    file.Word.RemoveAt(i);
-
-                    int index = addTranslate.IndexOf('=');
-                    addTranslate = addTranslate.Remove(0, index);
-                    index = addTranslate.LastIndexOf('|');
-                    addTranslate = addTranslate.Remove(index);
-                }
+                concat += T + ";";
             }
 
-            string translationSum = null;
-            foreach (var i in translation)
+            if (file.Word.ContainsKey(checkWord))
             {
-                translationSum += i + ";";
+                file.Word[checkWord] += concat;
             }
-
-            file.Word.Add(word + addTranslate + translationSum + '|');
+            else
+            {
+                file.Word[checkWord] = new string(concat);
+            }
 
             using (StreamWriter sw = new StreamWriter(Path, false, System.Text.Encoding.Default))
             {
-                foreach (var w in file.Word)
+                var line = file.Word;
+
+                foreach (var l in line)
                 {
-                    await sw.WriteLineAsync(w);
+                    await sw.WriteLineAsync(l.Key + "\r\t" + l.Value);
                 }
             }
         }
