@@ -4,6 +4,7 @@
     {
         public ReadDictionary readDictionary;
         public WriteDictionary writeDictionary;
+       
         public Translation(string path)
         {
             readDictionary.Path = path;

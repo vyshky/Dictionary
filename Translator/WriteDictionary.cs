@@ -4,15 +4,22 @@ using System.Threading.Tasks;
 
 namespace Translator
 {
-    public class WriteDictionary
+    public sealed class WriteDictionary
     {
+        ReadDictionary file;
         public string Path { get; set; }
         public string[] Translations { get; set; }
 
-        public async Task AddTranslation(string checkWord, ReadDictionary file)
+        public WriteDictionary(string path = null)
+        {
+            Path = path ?? throw new ArgumentNullException(nameof(path));
+            file = new ReadDictionary(path);
+        }
+
+        public async Task AddTranslation(string checkWord)
         {
             if (Path == null) throw new NullReferenceException();
-            //ReadDictionary file = new ReadDictionary { Path = this.Path };
+            
             file.LoadDictionary();
 
             string concat = string.Empty;

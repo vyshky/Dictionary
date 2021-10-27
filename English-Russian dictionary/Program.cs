@@ -10,9 +10,10 @@ namespace English_Russian_dictionary
                 @"C:\Users\vyshk\RiderProjects\English-Russian dictionary\Translator\bin\Debug\net5.0\dictionary\Russian.dsl";
 
             // Загрузка файла в память
-            ReadDictionary dictioanary = new ReadDictionary { Path = path };
+            ReadDictionary dictioanary = new ReadDictionary(path);
             dictioanary.LoadDictionary();
-            //
+           
+
             // Запись в файл нового элемента
 
             string[] translation = new[] { "Translations" };
@@ -32,12 +33,13 @@ namespace English_Russian_dictionary
             AddTranslate(word, translation, path);
         }
 
-        public static void AddTranslate(string word, string[] translations, string path)
+        public static void AddTranslate(string addWord, string[] translations, string pathDictionary)
         {
-            ReadDictionary fileRead = new ReadDictionary { Path = path };
-            WriteDictionary fileWrite = new WriteDictionary { Path = path };
-            fileWrite.Translations = translations;
-            fileWrite.AddTranslation(word, fileRead);
+            WriteDictionary fileWrite = new WriteDictionary(pathDictionary)
+            {
+                Translations = translations
+            };
+            fileWrite.AddTranslation(addWord);
         }
     }
 }

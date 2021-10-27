@@ -4,42 +4,48 @@ using System.IO;
 
 namespace Translator
 {
-    public class ReadDictionary
+    public sealed class ReadDictionary
     {
-        public string Path { get; set; }
         public SortedDictionary<string, string> Words { get; set; } = new();
-        public string FileStr { get; set; }
+        private string file;
+        public string Path { get; set; }
+
+
+        public ReadDictionary(string path = null)
+        {
+            file = string.Empty;
+            Path = path ?? throw new ArgumentNullException(nameof(path));
+        }
 
         public void LoadDictionary()
         {
             if (Path == null) throw new NullReferenceException();
-            string[] str;
             try
             {
-                using (StreamReader writeLine = new StreamReader(Path))
-                {
-                    using (StreamReader sr = new StreamReader(Path))
-                    {
-                        FileStr = sr.ReadToEnd();
-                    }
-                }
+                using StreamReader sr = new StreamReader(Path);
+                file = sr.ReadToEnd();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
 
-            string[] lines = FileStr.Split('\r');
-            lines = Trim(lines);
+            WordsSplitting();
+        }
+
+        public void WordsSplitting()
+        {
+            string[] lines = file.Split('\r');
+            lines = TrimArray(lines);
 
             for (int i = 0; i < lines.Length; i += 2)
             {
-                if (lines[i] == "") continue;
+                if (lines[i] == string.Empty) continue;
                 Words[lines[i]] = new string(lines[i + 1]);
             }
         }
 
-        public string[] Trim(string[] lines)
+        private string[] TrimArray(string[] lines)
         {
             for (int i = 0; i < lines.Length; ++i)
             {
@@ -48,6 +54,7 @@ namespace Translator
                 lines[i] = lines[i].Replace('\t', ' ');
                 lines[i] = lines[i].Trim(' ');
             }
+
             return lines;
         }
     }
