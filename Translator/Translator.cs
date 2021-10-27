@@ -2,7 +2,14 @@
 {
     public class Translation
     {
-        public string Word { get; set; }
-        public string Home { get; set; }
+        public ReadDictionary readDictionary;
+        public WriteDictionary writeDictionary;
+        public Translation(string path)
+        {
+            readDictionary.Path = path;
+            writeDictionary.Path = path;
+        }
+        
+        
     }
 }

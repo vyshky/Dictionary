@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 
 namespace Translator
 {
-    public class Dictionary
+    public class ReadDictionary
     {
         public string Path { get; set; }
-        public Dictionary<string, string> Word { get; set; } = new();
+        public SortedDictionary<string, string> Words { get; set; } = new();
         public string FileStr { get; set; }
 
         public void LoadDictionary()
@@ -37,7 +35,7 @@ namespace Translator
             for (int i = 0; i < lines.Length; i += 2)
             {
                 if (lines[i] == "") continue;
-                Word[lines[i]] = new string(lines[i + 1]);
+                Words[lines[i]] = new string(lines[i + 1]);
             }
         }
 
@@ -50,7 +48,6 @@ namespace Translator
                 lines[i] = lines[i].Replace('\t', ' ');
                 lines[i] = lines[i].Trim(' ');
             }
-
             return lines;
         }
     }

@@ -7,34 +7,34 @@ namespace Translator
     public class WriteDictionary
     {
         public string Path { get; set; }
-        public string[] Translation { get; set; }
+        public string[] Translations { get; set; }
 
-        public async Task AddTranslation(string checkWord)
+        public async Task AddTranslation(string checkWord, ReadDictionary file)
         {
             if (Path == null) throw new NullReferenceException();
-            Dictionary file = new Dictionary { Path = this.Path };
+            //ReadDictionary file = new ReadDictionary { Path = this.Path };
             file.LoadDictionary();
 
             string concat = string.Empty;
-            foreach (var T in Translation)
+            foreach (var T in Translations)
             {
                 concat += T + ";";
             }
 
-            if (file.Word.ContainsKey(checkWord))
+            if (file.Words.ContainsKey(checkWord))
             {
-                file.Word[checkWord] += concat;
+                file.Words[checkWord] += concat;
             }
             else
             {
-                file.Word[checkWord] = new string(concat);
+                file.Words[checkWord] = new string(concat);
             }
 
             using (StreamWriter sw = new StreamWriter(Path, false, System.Text.Encoding.Default))
             {
-                var line = file.Word;
+                var lines = file.Words;
 
-                foreach (var l in line)
+                foreach (var l in lines)
                 {
                     await sw.WriteLineAsync(l.Key + "\r\t" + l.Value);
                 }
