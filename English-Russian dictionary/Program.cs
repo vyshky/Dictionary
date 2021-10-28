@@ -9,14 +9,9 @@ namespace English_Russian_dictionary
             string path =
                 @"C:\Users\vyshk\RiderProjects\English-Russian dictionary\Translator\bin\Debug\net5.0\dictionary\Russian.dsl";
 
-            // Загрузка файла в память
-            ReadDictionary dictioanary = new ReadDictionary(path);
-            dictioanary.LoadDictionary();
-           
-
             // Запись в файл нового элемента
 
-            string[] translation = new[] { "Translations" };
+            string[] translation = new[] { "Translation" };
             string word = "Перевод";
             AddTranslate(word, translation, path);
 
@@ -31,13 +26,20 @@ namespace English_Russian_dictionary
             translation = new[] { "Earth" };
             word = "Земля";
             AddTranslate(word, translation, path);
+
+            // Изменение перевода и слова
+            TranslationManager manager = new TranslationManager(path);
+            manager.ReplaceTranslation("Перевод", "Translation", "NewTranslation");
+            manager.ReplaceWord("Перевод", "Translate");
+
+            // TODO :: Написать Эксцэпшин при добавлении EQUALS(Перевод(VALUE));
         }
 
         public static void AddTranslate(string addWord, string[] translations, string pathDictionary)
         {
             WriteDictionary fileWrite = new WriteDictionary(pathDictionary)
             {
-                Translations = translations
+                TranslationsArray = translations
             };
             fileWrite.AddTranslation(addWord);
         }

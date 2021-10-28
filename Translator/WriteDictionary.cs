@@ -6,40 +6,44 @@ namespace Translator
 {
     public sealed class WriteDictionary
     {
-        ReadDictionary file;
-        public string Path { get; set; }
-        public string[] Translations { get; set; }
+        private readonly ReadDictionary _file;
+        private string Path { get; set; }
+        public string[] TranslationsArray { get; set; }
 
         public WriteDictionary(string path = null)
         {
             Path = path ?? throw new ArgumentNullException(nameof(path));
-            file = new ReadDictionary(path);
+            _file = new ReadDictionary(path);
         }
 
-        public async Task AddTranslation(string checkWord)
+        public void AddTranslation(string checkWord)
         {
             if (Path == null) throw new NullReferenceException();
-            
-            file.LoadDictionary();
 
-            string concat = string.Empty;
-            foreach (var T in Translations)
+            _file.LoadDictionary();
+            string concatTranslations = string.Empty;
+            foreach (var translation in TranslationsArray)
             {
-                concat += T + ";";
+                concatTranslations += translation + ";";
             }
 
-            if (file.Words.ContainsKey(checkWord))
+            if (_file.SortedDictionary.ContainsKey(checkWord))
             {
-                file.Words[checkWord] += concat;
+                _file.SortedDictionary[checkWord] += concatTranslations;
             }
             else
             {
-                file.Words[checkWord] = new string(concat);
+                _file.SortedDictionary[checkWord] = new string(concatTranslations);
             }
 
+            WriteToFile(_file);
+        }
+
+        public async void WriteToFile(ReadDictionary file)
+        {
             using (StreamWriter sw = new StreamWriter(Path, false, System.Text.Encoding.Default))
             {
-                var lines = file.Words;
+                var lines = file.SortedDictionary;
 
                 foreach (var l in lines)
                 {

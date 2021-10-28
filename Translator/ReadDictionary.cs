@@ -6,15 +6,16 @@ namespace Translator
 {
     public sealed class ReadDictionary
     {
-        public SortedDictionary<string, string> Words { get; set; } = new();
-        private string file;
-        public string Path { get; set; }
+        private string _notSerializedFile;
+        private string Path { get; }
+        public SortedDictionary<string, string> SortedDictionary { get; private set; }
 
 
         public ReadDictionary(string path = null)
         {
-            file = string.Empty;
             Path = path ?? throw new ArgumentNullException(nameof(path));
+            _notSerializedFile = string.Empty;
+            SortedDictionary = new SortedDictionary<string, string>();
         }
 
         public void LoadDictionary()
@@ -23,26 +24,33 @@ namespace Translator
             try
             {
                 using StreamReader sr = new StreamReader(Path);
-                file = sr.ReadToEnd();
+                _notSerializedFile = sr.ReadToEnd();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
 
-            WordsSplitting();
+            string[] lines = WordsSplitting(_notSerializedFile);
+            SortedDictionary = InitDictionary(lines);
         }
 
-        public void WordsSplitting()
+        private SortedDictionary<string, string> InitDictionary(string[] lines)
+        {
+            for (int key = 0; key < lines.Length; key += 2)
+            {
+                if (lines[key] == string.Empty) continue;
+                SortedDictionary[lines[key]] = new string(lines[key + 1]);
+            }
+
+            return SortedDictionary;
+        }
+
+        private string[] WordsSplitting(string file)
         {
             string[] lines = file.Split('\r');
             lines = TrimArray(lines);
-
-            for (int i = 0; i < lines.Length; i += 2)
-            {
-                if (lines[i] == string.Empty) continue;
-                Words[lines[i]] = new string(lines[i + 1]);
-            }
+            return lines;
         }
 
         private string[] TrimArray(string[] lines)
