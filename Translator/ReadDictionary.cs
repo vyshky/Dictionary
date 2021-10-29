@@ -7,23 +7,23 @@ namespace Translator
     public sealed class ReadDictionary
     {
         private string _notSerializedFile;
-        private string Path { get; }
+        private readonly string _path;
         public SortedDictionary<string, string> SortedDictionary { get; private set; }
 
 
         public ReadDictionary(string path = null)
         {
-            Path = path ?? throw new ArgumentNullException(nameof(path));
+            _path = path ?? throw new ArgumentNullException(nameof(path));
             _notSerializedFile = string.Empty;
             SortedDictionary = new SortedDictionary<string, string>();
         }
 
         public void LoadDictionary()
         {
-            if (Path == null) throw new NullReferenceException();
+            if (_path == null) throw new NullReferenceException();
             try
             {
-                using StreamReader sr = new StreamReader(Path);
+                using StreamReader sr = new StreamReader(_path);
                 _notSerializedFile = sr.ReadToEnd();
             }
             catch (Exception e)

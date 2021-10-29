@@ -8,40 +8,30 @@ namespace English_Russian_dictionary
         {
             string path =
                 @"C:\Users\vyshk\RiderProjects\English-Russian dictionary\Translator\bin\Debug\net5.0\dictionary\Russian.dsl";
+            TranslationManager fileWrite = new TranslationManager(path);
 
-            // Запись в файл нового элемента
+            // string[] translationArray = { "Мир привет", "Privet mir" };
+            // string helloWorld = "Hello World";
+            // fileWrite.AddWord("Hello World", "Привет мир");
+            // fileWrite.AddValues(helloWorld, translationArray);
+            //
+            // // Запись в файл нового элемента
+            // string word = "Перевод";
+            // fileWrite.AddWord(word, "Translation");
+            //
+            // word = "Мыш";
+            // fileWrite.AddWord(word, "Mouse");
+            //
+            // word = "Дом";
+            // fileWrite.AddWord(word, "Home");
+            //
+            // word = "Земля";
+            // fileWrite.AddWord(word, "Earth");
 
-            string[] translation = new[] { "Translation" };
-            string word = "Перевод";
-            AddTranslate(word, translation, path);
-
-            translation = new[] { "Mouse" };
-            word = "Мыш";
-            AddTranslate(word, translation, path);
-
-            translation = new[] { "Home" };
-            word = "Дом";
-            AddTranslate(word, translation, path);
-
-            translation = new[] { "Earth" };
-            word = "Земля";
-            AddTranslate(word, translation, path);
-
-            // Изменение перевода и слова
-            TranslationManager manager = new TranslationManager(path);
-            manager.ReplaceTranslation("Перевод", "Translation", "NewTranslation");
-            manager.ReplaceWord("Перевод", "Translate");
-
-            // TODO :: Написать Эксцэпшин при добавлении EQUALS(Перевод(VALUE));
-        }
-
-        public static void AddTranslate(string addWord, string[] translations, string pathDictionary)
-        {
-            WriteDictionary fileWrite = new WriteDictionary(pathDictionary)
-            {
-                TranslationsArray = translations
-            };
-            fileWrite.AddTranslation(addWord);
+            // // Изменение перевода и слова
+            // TranslationManager manager = new TranslationManager(path);
+            // manager.ReplaceValue("Перевод", "Translation", "NewTranslation");
+            // manager.ReplaceKey("Перевод", "Измененный Перевод");
         }
     }
 }
