@@ -10,7 +10,6 @@ namespace Translator
         private readonly string _path;
         public SortedDictionary<string, string> SortedDictionary { get; private set; }
 
-
         public ReadDictionary(string path = null)
         {
             _path = path ?? throw new ArgumentNullException(nameof(path));
@@ -18,18 +17,25 @@ namespace Translator
             SortedDictionary = new SortedDictionary<string, string>();
         }
 
+        public bool ContainsKey(string wordIndex)
+        {
+            return SortedDictionary.ContainsKey(wordIndex);
+        }
+
+        public void Remove(string oldWord)
+        {
+            SortedDictionary.Remove(oldWord);
+        }
+
+        public void Add(string newWord, string translations)
+        {
+            SortedDictionary.Add(newWord, translations);
+        }
+
         public void LoadDictionary()
         {
-            if (_path == null) throw new NullReferenceException();
-            try
-            {
-                using StreamReader sr = new StreamReader(_path);
-                _notSerializedFile = sr.ReadToEnd();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            using StreamReader sr = new StreamReader(_path);
+            _notSerializedFile = sr.ReadToEnd();
 
             string[] lines = WordsSplitting(_notSerializedFile);
             SortedDictionary = InitDictionary(lines);
@@ -40,7 +46,8 @@ namespace Translator
             for (int key = 0; key < lines.Length; key += 2)
             {
                 if (lines[key] == string.Empty) continue;
-                SortedDictionary[lines[key]] = new string(lines[key + 1]);
+                //SortedDictionary[lines[key]] = lines[key + 1];
+                SortedDictionary.Add(lines[key], lines[key + 1]);
             }
 
             return SortedDictionary;
@@ -49,11 +56,11 @@ namespace Translator
         private string[] WordsSplitting(string file)
         {
             string[] lines = file.Split('\r');
-            lines = TrimArray(lines);
+            TrimArray(lines);
             return lines;
         }
 
-        private string[] TrimArray(string[] lines)
+        private void TrimArray(string[] lines)
         {
             for (int i = 0; i < lines.Length; ++i)
             {
@@ -62,8 +69,6 @@ namespace Translator
                 lines[i] = lines[i].Replace('\t', ' ');
                 lines[i] = lines[i].Trim(' ');
             }
-
-            return lines;
         }
     }
 }

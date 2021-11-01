@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 
 namespace Translator.utility
 {
-    public class Replace
+    public static class Replace
     {
         public static string Value(string getTranslations, string oldValue, string newValue)
         {
@@ -11,27 +12,14 @@ namespace Translator.utility
             for (int i = 0; i < tempValue.Length; ++i)
             {
                 var translation = tempValue[i].TrimStart();
-                if (translation == oldValue)
-                {
-                    tempValue[i] = newValue;
-                    string concatTranslations = ConcatArrayTranslations(tempValue);
-                    return concatTranslations;
-                }
+                if (translation != oldValue) continue;
+
+                tempValue[i] = newValue;
+                string concatTranslations = Concat.ArrayToString(tempValue);
+                return concatTranslations;
             }
 
             throw new Exception("Перевод(Value) для изменения не найден");
-        }
-
-        private static string ConcatArrayTranslations(string[] array)
-        {
-            string concat = string.Empty;
-            foreach (var line in array)
-            {
-                if (line == string.Empty) continue;
-                concat += line + ";";
-            }
-
-            return concat;
         }
     }
 }

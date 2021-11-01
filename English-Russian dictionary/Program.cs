@@ -1,4 +1,5 @@
-﻿using Translator;
+﻿using System.IO;
+using Translator;
 
 namespace English_Russian_dictionary
 {
@@ -6,30 +7,59 @@ namespace English_Russian_dictionary
     {
         public static void Main()
         {
-            string path =
-                @"C:\Users\vyshk\RiderProjects\English-Russian dictionary\Translator\bin\Debug\net5.0\dictionary\Russian.dsl";
-            TranslationManager fileWrite = new TranslationManager(path);
+            string path = @"dictionary/Russian.dsl2";
+            string path2 = @"dictionary/English.dsl2";
+            TranslationManager manager = new TranslationManager(path);
 
-            // string[] translationArray = { "Мир привет", "Privet mir" };
-            // string helloWorld = "Hello World";
-            // fileWrite.AddWord("Hello World", "Привет мир");
-            // fileWrite.AddValues(helloWorld, translationArray);
+            manager.Open();
+
+            if (!File.Exists(path))
+            {
+                //TODO : Что лучше?
+                // FileInfo newFile = new FileInfo(_path);
+                // FileStream fs = newFile.Create();
+                // fs.Close();
+                //TODO : ИЛИ ЭТО
+                using (File.Create(path)) ;
+            }
+
+            if (!File.Exists(path2))
+            {
+                //TODO : Что лучше?
+                // FileInfo newFile = new FileInfo(_path);
+                // FileStream fs = newFile.Create();
+                // fs.Close();
+                //TODO : ИЛИ ЭТО
+                using (File.Create(path2)) ;
+            }
+
+
+            // string[] translationArray = { "Mir privet", "Privet mir" };
+            // string helloWorld = "Привет мир";
+            // manager.AddWord("Привет мир", "Hello World");
+            // manager.AddValue(helloWorld, translationArray);
+            // manager.AddValue(helloWorld, "Удали меня");
             //
-            // // Запись в файл нового элемента
+            // // // Запись в файл нового элемента
             // string word = "Перевод";
-            // fileWrite.AddWord(word, "Translation");
-            //
-            // word = "Мыш";
-            // fileWrite.AddWord(word, "Mouse");
+            // manager.AddWord(word, "Translation");
             //
             // word = "Дом";
-            // fileWrite.AddWord(word, "Home");
+            // manager.AddWord(word, "Home");
             //
             // word = "Земля";
-            // fileWrite.AddWord(word, "Earth");
+            // manager.AddWord(word, "Earth");
 
-            // // Изменение перевода и слова
-            // TranslationManager manager = new TranslationManager(path);
+
+            //manager.DeleteWord("Привет мир");
+            //manager.DeleteValue("Перевод", "Translation");
+
+            //Console.WriteLine($"Привет мир -  {manager.Search("Привет мир")}");
+            manager.ExportToDictionary("Дом", path2);
+
+            manager.Save();
+
+            // // // Изменение перевода и слова
             // manager.ReplaceValue("Перевод", "Translation", "NewTranslation");
             // manager.ReplaceKey("Перевод", "Измененный Перевод");
         }

@@ -7,24 +7,27 @@ namespace Translator
     public sealed class WriteDictionary
     {
         private readonly string _path;
-        private readonly ReadDictionary _file;
 
         public WriteDictionary(string path = null)
         {
             _path = path ?? throw new ArgumentNullException(nameof(path));
-            _file = new ReadDictionary(path);
         }
 
-        public async void WriteToFile(ReadDictionary file)
+        public async void WriteToFileAsync(ReadDictionary dictionary)
         {
-            using (StreamWriter sw = new StreamWriter(_path, false, System.Text.Encoding.Default))
+            await using StreamWriter file = new StreamWriter(_path, false);
+            foreach (var line in dictionary.SortedDictionary)
             {
-                var lines = file.SortedDictionary;
+                await file.WriteLineAsync(line.Key + "\r\t" + line.Value);
+            }
+        }
 
-                foreach (var l in lines)
-                {
-                    await sw.WriteLineAsync(l.Key + "\r\t" + l.Value);
-                }
+        public static async void ExportToFileAsync(ReadDictionary dictionary, string path)
+        {
+            await using StreamWriter file = new StreamWriter(path, false);
+            foreach (var line in dictionary.SortedDictionary)
+            {
+                await file.WriteLineAsync(line.Key + "\r\t" + line.Value);
             }
         }
     }

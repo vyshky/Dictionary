@@ -8,6 +8,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Translator\Translator.csproj" />
+    </ItemGroup>    
+
+    <ItemGroup>
+      <Folder Include="bin\Debug\net5.0" />
+    </ItemGroup>    
+
+    <ItemGroup>
+      <Content Include="bin\Debug\net5.0\dictionary\English.dsl" />
+      <Content Include="bin\Debug\net5.0\dictionary\Russian.dsl" />
     </ItemGroup>
 
 </Project>
