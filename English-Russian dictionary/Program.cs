@@ -7,8 +7,8 @@ namespace English_Russian_dictionary
     {
         public static void Main()
         {
-            string path = @"dictionary/Russian.dsl2";
-            string path2 = @"dictionary/English.dsl2";
+            string path = @"dictionary/Russian.dsl";
+            string path2 = @"dictionary/English.dsl";
             TranslationManager manager = new TranslationManager(path);
 
             manager.Open();
